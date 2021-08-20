@@ -1,11 +1,11 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
 	.AddJsonFile("appsettings.json")
 	.AddUserSecrets("930d7287-a0ec-4b4f-a966-8a70c29e4a05")
 	.AddEnvironmentVariables();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -15,7 +15,7 @@ if (!app.Environment.IsDevelopment())
 
 app.MapGet("", async context =>
 {
-	string url = app.Configuration[$"Redirects:{context.Request.Host.Host}"];
+	string url = app.Configuration.GetSection("Redirects")[context.Request.Host.Host];
 	if (url != null)
 	{
 		context.Response.Redirect(url);
